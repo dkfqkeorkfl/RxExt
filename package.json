@@ -1,0 +1,31 @@
+{
+  "name": "rx_ext",
+  "version": "0.0.1",
+  "description": "Some scripts for rx of Sassry project",
+  "main": "SasRx.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dkfqkeorkfl/RxExt.git"
+  },
+  "keywords": [
+    "#rx",
+    "#extension",
+    "#ext",
+    "#reactive"
+  ],
+  "author": "SeungHyung, Lee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dkfqkeorkfl/RxExt/issues"
+  },
+  "homepage": "https://github.com/dkfqkeorkfl/RxExt#readme",
+  "dependencies": {
+    "csvtojson": "^2.0.8",
+    "node-rsa": "^1.0.3",
+    "request": "^2.88.0",
+    "rx": "^4.1.0"
+  }
+}
