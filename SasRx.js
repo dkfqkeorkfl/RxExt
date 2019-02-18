@@ -92,17 +92,21 @@ const ex = {
     },
 
     WSListen(config) {
-        const ws = new WS_SERVER(config);
-        return RX.Observable.create(observer => {
-            ws.on('request', req => observer.onNext(req))
-                .on('connect', conn => observer.onNext(conn))
-                .on('close', () => observer.onCompleted());
+        return RX.Observable.range(0, 1)
+            .select(_ => new WS_SERVER(config))
+            .selectMany(ws => {
+                return RX.Observable.create(observer => {
 
-            return new RX.Disposable(() => {
-                ws.shutDown();
-                ws.removeAllListeners();
-            })
-        })
+                    ws.on('request', req => observer.onNext(req))
+                        .on('connect', conn => observer.onNext(conn))
+                        .on('close', () => observer.onCompleted());
+
+                    return new RX.Disposable(() => {
+                        ws.shutDown();
+                        ws.removeAllListeners();
+                    })
+                })
+            });
     },
 
     WSRecv(connection) {
