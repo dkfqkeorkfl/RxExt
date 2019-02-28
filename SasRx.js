@@ -126,6 +126,13 @@ const ex = {
                     .removeListener('error', onError);
             })
         });
+    },
+
+    CollectionDateObs(start, end, interval) {
+        const size = (end.valueOf() - start.valueOf()) / interval;
+        return RX.Observable.range(0, size)
+            .map(i => start.valueOf() + (interval * i))
+            .map(v => new Date(v));
     }
 }
 

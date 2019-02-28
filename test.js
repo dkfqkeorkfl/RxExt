@@ -1,5 +1,13 @@
 const rx = require('./SasRx');
 
+//86400000
+rx.CollectionDateObs(new Date('2019-01-01'), new Date('2019-01-02'), 86400000)
+    .subscribe(
+        date => console.log(date),
+        err => console.log(err),
+        _ => console.log('complete')
+    );
+
 rx.Observable.range(0, 100)
     .toArray()
     .flatMap(datas => {
