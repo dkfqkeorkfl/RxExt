@@ -1,5 +1,13 @@
 # RxExt
 
+//86400000
+     RX.CollectionDateObs(new Date('2019-01-01'), new Date('2019-01-02'), 86400000/4)
+         .subscribe(
+             date => console.log(date),
+             err => console.log(err),
+             _ => console.log('complete')
+         );
+
      // FollowingAsObserverable
     RX.Observable.range(0, 100)
         .toArray()
