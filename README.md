@@ -1,6 +1,6 @@
 # RxExt
 
-//86400000
+     // CollectionDateObs
      RX.CollectionDateObs(new Date('2019-01-01'), new Date('2019-01-02'), 86400000/4)
          .subscribe(
              date => console.log(date),
