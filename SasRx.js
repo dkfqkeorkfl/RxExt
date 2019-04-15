@@ -5,6 +5,11 @@ const RSA = require('node-rsa');
 const WS_SERVER = require('websocket').server;
 
 function Following(observer, func, argcs) {
+    if (argcs.length == 0) {
+        observer.onCompleted();
+        return;
+    }
+
     const argc = argcs.shift();
     func(argc)
         .subscribe(
@@ -99,7 +104,7 @@ const ex = {
 
                     ws.on('request', req => observer.onNext(req))
                         .on('connect', conn => observer.onNext(conn))
-                        .on('close', () => observer.onCompleted());
+                        // .on('close', () => observer.onCompleted());
 
                     return new RX.Disposable(() => {
                         ws.shutDown();
