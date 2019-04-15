@@ -66,6 +66,17 @@ const ex = {
         });
     },
 
+    FromTask(task) {
+        return RX.Observable.fromPromise(
+            new Promise((resolve, reject) => {
+                try {
+                    resolve(task());
+                } catch (err) {
+                    reject(err);
+                }
+            }));
+    },
+
     DecryptRsaKey(test, key) {
         return RX.Observable.fromPromise(new Promise((resolve, reject) => {
             let rsa = new RSA();
