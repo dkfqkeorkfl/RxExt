@@ -5,11 +5,6 @@ const RSA = require('node-rsa');
 const WS_SERVER = require('websocket').server;
 
 function Following(observer, func, argcs) {
-    if (argcs.length == 0) {
-        observer.onCompleted();
-        return;
-    }
-
     const argc = argcs.shift();
     func(argc)
         .subscribe(
@@ -20,6 +15,7 @@ function Following(observer, func, argcs) {
 }
 
 const ex = {
+
     IntervalToObsv(ms, func) {
         return RX.Observable.create(observer => {
             const iserial = setInterval(() => {
@@ -66,17 +62,6 @@ const ex = {
         });
     },
 
-    FromTask(task) {
-        return RX.Observable.fromPromise(
-            new Promise((resolve, reject) => {
-                try {
-                    resolve(task());
-                } catch (err) {
-                    reject(err);
-                }
-            }));
-    },
-
     DecryptRsaKey(test, key) {
         return RX.Observable.fromPromise(new Promise((resolve, reject) => {
             let rsa = new RSA();
@@ -112,10 +97,14 @@ const ex = {
             .select(_ => new WS_SERVER(config))
             .selectMany(ws => {
                 return RX.Observable.create(observer => {
-
-                    ws.on('request', req => observer.onNext(req))
-                        .on('connect', conn => observer.onNext(conn))
-                        // .on('close', () => observer.onCompleted());
+                    ws.on('request', req => {
+                            if (!config.autoAcceptConnections)
+                                observer.onNext(req);
+                        })
+                        .on('connect', conn => {
+                            if (config.autoAcceptConnections)
+                                observer.onNext(conn)
+                        })
 
                     return new RX.Disposable(() => {
                         ws.shutDown();
@@ -136,19 +125,14 @@ const ex = {
                 .on('error', onError)
 
             return new RX.Disposable(() => {
+                if (conn.connected)
+                    connection.close();
                 connection
                     .removeListener('message', onRecv)
                     .removeListener('close', onDisconn)
                     .removeListener('error', onError);
             })
         });
-    },
-
-    CollectionDateObs(start, end, interval) {
-        const size = (end.valueOf() - start.valueOf()) / interval;
-        return RX.Observable.range(0, size)
-            .map(i => start.valueOf() + (interval * i))
-            .map(v => new Date(v));
     }
 }
 

@@ -1,7 +1,7 @@
 const rx = require('./SasRx');
 
 //86400000
-rx.CollectionDateObs(new Date('2019-01-01'), new Date('2019-01-02'), 86400000)
+rx.CollectionDateObs(new Date('2019-01-01'), new Date('2019-01-02'), 86400000/4)
     .subscribe(
         date => console.log(date),
         err => console.log(err),
