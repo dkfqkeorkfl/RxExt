@@ -1,6 +1,6 @@
 {
     "name": "rxext",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "Some scripts for rx of Sassry project",
     "main": "SasRx.js",
     "scripts": {

@@ -31,6 +31,7 @@ const ex = {
         return RX.Observable.create(observer => {
             const tserial = setTimeout(() => {
                 observer.onNext(func());
+                observer.onCompleted();
             }, ms);
 
             return new RX.Disposable(() => {
@@ -42,6 +43,7 @@ const ex = {
         return RX.Observable.create(observer => {
             const iserial = setImmediate(() => {
                 observer.onNext(func());
+                observer.onCompleted();
             });
 
             return new RX.Disposable(() => {
