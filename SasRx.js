@@ -5,6 +5,11 @@ const RSA = require('node-rsa');
 const WS_SERVER = require('websocket').server;
 
 function Following(observer, func, argcs) {
+    if (argcs.length == 0) {
+        observer.onCompleted();
+        return;
+    }
+
     const argc = argcs.shift();
     func(argc)
         .subscribe(
@@ -16,10 +21,10 @@ function Following(observer, func, argcs) {
 
 const ex = {
 
-    IntervalToObsv(ms, func) {
+    IntervalToObsv(ms) {
         return RX.Observable.create(observer => {
             const iserial = setInterval(() => {
-                observer.onNext(func());
+                observer.onNext(true);
             }, ms);
 
             return new RX.Disposable(() => {
@@ -27,10 +32,10 @@ const ex = {
             })
         })
     },
-    TimeoutToObsv(ms, func) {
+    TimeoutToObsv(ms) {
         return RX.Observable.create(observer => {
             const tserial = setTimeout(() => {
-                observer.onNext(func());
+                observer.onNext(true);
                 observer.onCompleted();
             }, ms);
 
@@ -39,10 +44,10 @@ const ex = {
             })
         })
     },
-    ImmediateToObsv(func) {
+    ImmediateToObsv() {
         return RX.Observable.create(observer => {
             const iserial = setImmediate(() => {
-                observer.onNext(func());
+                observer.onNext(true);
                 observer.onCompleted();
             });
 
@@ -127,7 +132,7 @@ const ex = {
                 .on('error', onError)
 
             return new RX.Disposable(() => {
-                if (conn.connected)
+                if (connection.connected)
                     connection.close();
                 connection
                     .removeListener('message', onRecv)
@@ -135,6 +140,13 @@ const ex = {
                     .removeListener('error', onError);
             })
         });
+    },
+
+    CollectionDateObs(start, end, interval) {
+        const size = (end.valueOf() - start.valueOf()) / interval;
+        return RX.Observable.range(0, size)
+            .map(i => start.valueOf() + (interval * i))
+            .map(v => new Date(v));
     }
 }
 
