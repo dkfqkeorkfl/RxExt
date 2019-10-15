@@ -57,9 +57,9 @@ const ex = {
         })
     },
 
-    DownloadSheet(url) {
+    DownloadSheet(url, option) {
         return RX.Observable.create(observer => {
-            CSV()
+            CSV(option)
                 .fromStream(REQUEST.get(url))
                 .subscribe(
                     json => observer.onNext(json),
